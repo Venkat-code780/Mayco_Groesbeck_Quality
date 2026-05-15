@@ -78,7 +78,7 @@ const LPAAuditors: React.FC<LPAAuditorsProps> = (props) => {
       // Create SP instance for the root site
 
       const [auditors, auditLevels] = await Promise.all([
-        getListItems("Auditors", JvisURL, "Title,Plant/Title", "Plant", "Plant/Title eq 'Merrill'"),
+        getListItems("Auditors", JvisURL, "Title,Plant/Title", "Plant", "Plant/Title eq 'Groesbeck'"),
         getListItems("LPA Auditor Level", currentSiteURL)
       ]);
       setAuditors(auditors);

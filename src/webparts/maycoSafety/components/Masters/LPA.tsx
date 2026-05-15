@@ -62,13 +62,13 @@ const LPA: React.FC<LPAProps> = (props) => {
   const loadData = async () => {
     try {
       const [plantData, deptData, LpaList] = await Promise.all([
-        getListItems("Plant", JvisURL, "*", "", "Title eq 'Merrill'"),
+        getListItems("Plant", JvisURL, "*", "", "Title eq 'Groesbeck'"),
         getListItems(
           "Department",
           JvisURL,
           "Plant/Title,Title",
           "Plant",
-          "Plant/Title eq 'Merrill'"
+          "Plant/Title eq 'Groesbeck' and IsActive eq 1"
         ),
         // getListItems("LPA Configuration", currentSiteURL, "*")
          sp.web.lists

@@ -128,10 +128,22 @@ const LPAForm: React.FC<LPAFormProps> = (props) => {
         Year: item.Year || new Date().getFullYear().toString(),
         YearMonth: item.YearMonth || (new Date().getMonth() + 1).toString(),
       });
-      const filteredZ = (zoneData || []).filter((z: any) => z.Department?.Title === item.Department);
+      // const filteredZ = (zoneData || []).filter((z: any) => z.Department?.Title === item.Department);
+         const filteredZ = (zoneData || []).filter(
+  (z: any) =>
+    z.Plant?.Title === item.Title &&
+    z.Department?.Title === item.Department
+);
       setFilteredZones(filteredZ);
 
-      const filteredM = (machineData || []).filter((m: any) => m.Zone?.Title === item.Zone_x0009_);
+      // const filteredM = (machineData || []).filter((m: any) => m.Zone?.Title === item.Zone_x0009_);
+      const filteredM = (machineData || []).filter(
+  (m: any) =>
+    m.Plant?.Title === item.Title &&
+    m.Department?.Title === item.Department &&
+    m.Zone?.Title === item.Zone_x0009_
+);
+
 
       setFilteredMachines(filteredM);
       const filter = `Plant eq '${item.Title}' and Department eq '${item.Department}' and Is_x0020_Active eq 1`;
@@ -234,13 +246,13 @@ setLineItems(editLines);
   const loadData = async () => {
     try {
       const [plantData, deptData, ZoneData, MachineData, AuditorsData, supervisorsData, toolnumbersdata] = await Promise.all([
-        getListItems("Plant", JvisURL, "*", "", "Title eq 'Merrill'"),
-        getListItems("Department", JvisURL, "Plant/Title,Title", "Plant", "Plant/Title eq 'Merrill'"),
-        getListItems("Zones", JvisURL, "Plant/Title,Department/Title,Title", "Plant,Department", "Plant/Title eq 'Merrill'"),
-        getListItems("Machines", JvisURL, "Plant/Title,Department/Title,Zone/Title,Title", "Plant,Department,Zone", "Plant/Title eq 'Merrill'"),
+        getListItems("Plant", JvisURL, "*", "", "Title eq 'Groesbeck'"),
+        getListItems("Department", JvisURL, "Plant/Title,Title", "Plant", "Plant/Title eq 'Groesbeck' and IsActive eq 1"),
+        getListItems("Zones", JvisURL, "Plant/Title,Department/Title,Title", "Plant,Department", "Plant/Title eq 'Groesbeck'"),
+        getListItems("Machines", JvisURL, "Plant/Title,Department/Title,Zone/Title,Title", "Plant,Department,Zone", "Plant/Title eq 'Groesbeck'"),
         getListItems("LPA Auditors", currentSiteURL, "Title,Id", "", "Is_x0020_Active eq 1"),
-        getListItems("Supervisor", JvisURL, "Plant/Title,Title", "Plant", "Plant/Title eq 'Merrill'"),
-        getListItems("Tool Numbers", JvisURL, "Plant/Title,Title", "Plant", "Plant/Title eq 'Merrill'")
+        getListItems("Supervisor", JvisURL, "Plant/Title,Title", "Plant", "Plant/Title eq 'Groesbeck'"),
+        getListItems("Tool Numbers", JvisURL, "Plant/Title,Title", "Plant", "Plant/Title eq 'Groesbeck'")
       ]);
       setPlants(plantData);
       setDepartments(deptData);
@@ -335,7 +347,11 @@ setLineItems(editLines);
     /* ------------------ DEPARTMENT ------------------ */
 
     if (name === "Department") {
-      const filteredZ = allZones.filter((z: any) => z.Department?.Title === value);
+      // const filteredZ = allZones.filter((z: any) => z.Department?.Title === value);
+         const filteredZ = allZones.filter((z: any) =>
+    z.Plant?.Title === formData.Title &&
+    z.Department?.Title === value
+  );
       setFilteredZones(filteredZ);
       setFilteredMachines([]);
       setCategories({}); // clear old categories
@@ -346,7 +362,12 @@ setLineItems(editLines);
     }
 
     if (name === "Zone_x0009_") {
-      const filteredM = allMachines.filter((m: any) => m.Zone?.Title === value);
+      // const filteredM = allMachines.filter((m: any) => m.Zone?.Title === value);
+       const filteredM = allMachines.filter((m: any) =>
+    m.Plant?.Title === formData.Title &&
+    m.Department?.Title === formData.Department &&
+    m.Zone?.Title === value
+  );
       setFilteredMachines(filteredM);
       setFormData(prev => ({ ...prev, Zone_x0009_: value, Machine: "" }));
       return;

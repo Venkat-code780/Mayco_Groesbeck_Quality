@@ -270,14 +270,25 @@ const QAMatrixForm: React.FC<LPAFormProps> = (props) => {
       });
 
       // ✅ Populate dependent dropdowns
-      const filteredZ = allZones.filter(
-        (z: any) => z.Department?.Title === item.Department
-      );
+      // const filteredZ = allZones.filter(
+      //   (z: any) => z.Department?.Title === item.Department
+      // );
+           const filteredZ = allZones.filter(
+  (z: any) =>
+    z.Plant?.Title === item.Plant &&
+    z.Department?.Title === item.Department
+);
       setFilteredZones(filteredZ);
 
-      const filteredM = allMachines.filter(
-        (m: any) => m.Zone?.Title === item.Zone
-      );
+      // const filteredM = allMachines.filter(
+      //   (m: any) => m.Zone?.Title === item.Zone
+      // );
+       const filteredM = allMachines.filter(
+  (m: any) =>
+    m.Plant?.Title === item.Plant &&
+    m.Department?.Title === item.Department &&
+    m.Zone?.Title === item.Zone
+);
       setFilteredMachines(filteredM);
 
     } catch (e) {
@@ -292,16 +303,16 @@ const QAMatrixForm: React.FC<LPAFormProps> = (props) => {
   const loadData = async () => {
     try {
       const [plantData, deptData, ZoneData, MachineData, KPIData] = await Promise.all([
-        getListItems("Plant", JvisURL, "*", "", "Title eq 'Merrill'"),
+        getListItems("Plant", JvisURL, "*", "", "Title eq 'Groesbeck'"),
         getListItems(
           "Department",
           JvisURL,
           "Plant/Title,Title",
           "Plant",
-          "Plant/Title eq 'Merrill'"
+          "Plant/Title eq 'Groesbeck' and IsActive eq 1"
         ),
-        getListItems("Zones", JvisURL, "Plant/Title,Department/Title,Title", "Plant,Department", "Plant/Title eq 'Merrill'"),
-        getListItems("Machines", JvisURL, "Plant/Title,Department/Title,Zone/Title,Title", "Plant,Department,Zone", "Plant/Title eq 'Merrill'"),
+        getListItems("Zones", JvisURL, "Plant/Title,Department/Title,Title", "Plant,Department", "Plant/Title eq 'Groesbeck'"),
+        getListItems("Machines", JvisURL, "Plant/Title,Department/Title,Zone/Title,Title", "Plant,Department,Zone", "Plant/Title eq 'Groesbeck'"),
         getListItems("KPI", currentSiteURL, "*", "", "")
       ]);
       setPlants(plantData);
@@ -508,9 +519,11 @@ const QAMatrixForm: React.FC<LPAFormProps> = (props) => {
 
     if (name === "Department") {
 
-      const filteredZ = allZones.filter(
-        (z: any) => z.Department?.Title === value
-      );
+     const filteredZ = allZones.filter(
+  (z: any) =>
+    z.Plant?.Title === formData.Plant &&
+    z.Department?.Title === value
+);
 
       setFilteredZones(filteredZ);
       setFilteredMachines([]);
@@ -532,9 +545,16 @@ const QAMatrixForm: React.FC<LPAFormProps> = (props) => {
 
     if (name === "Zone_x0009_") {
 
-      const filteredM = allMachines.filter(
-        (m: any) => m.Zone?.Title === value
-      );
+      // const filteredM = allMachines.filter(
+      //   (m: any) => m.Zone?.Title === value
+      // );
+            const filteredM = allMachines.filter(
+  (m: any) =>
+    m.Plant?.Title === formData.Plant &&
+    m.Department?.Title === formData.Department &&
+    m.Zone?.Title === value
+);
+
 
       setFilteredMachines(filteredM);
 

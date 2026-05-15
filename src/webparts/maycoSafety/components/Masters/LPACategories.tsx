@@ -83,8 +83,8 @@ const LPACategories: React.FC<LPACategoriesProps> = (props) => {
             // Create SP instance for the root site
 
             const [Plant, Department] = await Promise.all([
-                getListItems("Plant", JvisURL, "*", "", "Title eq 'Merrill'"),
-                getListItems("Department", JvisURL, "Plant/Title,Title", "Plant", "Plant/Title eq 'Merrill'")
+                getListItems("Plant", JvisURL, "*", "", "Title eq 'Groesbeck'"),
+                getListItems("Department", JvisURL, "Plant/Title,Title", "Plant", "Plant/Title eq 'Groesbeck' and IsActive eq 1")
             ]);
             setPlants(Plant);
             setDepartment(Department);

@@ -133,15 +133,15 @@ const LPAReport: React.FC<LPAReportProps> = (props) => {
   const loadData = async () => {
     try {
       const [plantData, deptData, ZoneData, levelData] = await Promise.all([
-        getListItems("Plant", JvisURL, "*", "", "Title eq 'Merrill'"),
+        getListItems("Plant", JvisURL, "*", "", "Title eq 'Groesbeck'"),
         getListItems(
           "Department",
           JvisURL,
           "Plant/Title,Title",
           "Plant",
-          "Plant/Title eq 'Merrill'"
+          "Plant/Title eq 'Groesbeck' and IsActive eq 1"
         ),
-        getListItems("Zones", JvisURL, "Plant/Title,Department/Title,Title", "Plant,Department", "Plant/Title eq 'Merrill'"),
+        getListItems("Zones", JvisURL, "Plant/Title,Department/Title,Title", "Plant,Department", "Plant/Title eq 'Groesbeck'"),
         getListItems("LPA Auditor Level", currentSiteURL, "*", "", "")
       ]);
       setPlants(plantData);
